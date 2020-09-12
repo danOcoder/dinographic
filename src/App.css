@@ -1,4 +1,14 @@
 /* General Styles */
+.visually-hidden {
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
 body {
   background: rgb(111, 208, 224);
   background: linear-gradient(0deg, rgb(111, 208, 224) 0%, rgb(171, 228, 167) 100%);
@@ -35,12 +45,19 @@ p {
   font-weight: 100;
 }
 
+.main-content-container {
+  min-height: 490px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 /* Grid Styles */
 #grid {
   background: #fff url(images/tracks.png) no-repeat;
   background-size: cover;
   display: flex;
-  margin: 2em;
+  max-width: 80%;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
   flex-wrap: wrap;
 }
@@ -105,7 +122,7 @@ p {
 
 .grid-item p {
   background: rgba(000, 000, 000, 0.3);
-  position: absolute;
+  /* position: absolute; */
   bottom: 0;
   width: 100%;
   padding: 0.8em 0.8em 1.8em;
@@ -117,6 +134,7 @@ p {
 }
 
 /* Form Styles */
+
 .form-container {
   background: #eee;
   padding: 1.3em;
@@ -153,7 +171,7 @@ select {
   display: block;
 }
 
-#btn {
+.submit-button {
   display: inline-block;
   background: #ccc;
   padding: 0.8em;
@@ -161,13 +179,19 @@ select {
   transition: ease 0.3s all;
 }
 
-#btn:hover {
+.submit-button:hover {
   background: #777;
   color: #fff;
   cursor: pointer;
 }
 
 /* Footer */
+footer {
+  position: absolute;
+  left: 50%;
+  bottom: 5px;
+  transform: translate(-50%, -50%);
+}
 .fine-print {
   display: block;
   font-size: 0.7em;
