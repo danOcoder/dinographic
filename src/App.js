@@ -22,7 +22,7 @@ function App() {
   const [humanHeightIn, setHumanHeightIn] = useState(null);
   const [humanWeight, setHumanWeight] = useState(null);
   const [dob, setDob] = useState(null);
-  const [humanDiet, setHumanDiet] = useState(null);
+  const [displayArr, setDisplayArr] = useState([]);
 
   const totalHeight = (feet, inches) => {
     const height = parseInt(feet, 10) * 12 + parseInt(inches, 10);
@@ -32,45 +32,77 @@ function App() {
     return height;
   };
 
+  const randomIndex = (length) => Math.floor(Math.random() * length) + 1;
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('submitted');
+    dinoArr.forEach((dino) => {
+      dino.compareAge(userData.age);
+      dino.compareHeight(userData.height);
+      dino.compareWeight(userData.weight);
+    });
+
+    setDisplayArr(dinoArr);
 
     setHideForm(false);
   };
 
-  function Dino(species, weight, height, diet, when) {
+  function Dino(species, weight, height, when) {
     this.species = species;
     this.weight = weight;
     this.height = height;
-    this.diet = diet;
     this.when = when;
     this.img = '';
     this.altText = '';
     this.facts = [];
   }
 
-  function Human(weight, height, diet, when) {
-    this.species = 'Human';
+  Dino.prototype.addFact = function (fact) {
+    this.facts.push(fact);
+  };
+
+  Dino.prototype.compareAge = function (ageToCompare) {
+    this.addFact(`Looks like you missed ${this.species} by ${this.when - ageToCompare} years`);
+  };
+
+  Dino.prototype.compareHeight = function (heightToCompare) {
+    if (heightToCompare > this.height) {
+      this.addFact(`You are ${heightToCompare - this.height} inches taller than a ${this.species}`);
+    } else {
+      this.addFact(`A ${this.species} was ${this.height - heightToCompare} inches taller than you`);
+    }
+  };
+
+  Dino.prototype.compareWeight = function (weightToCompare) {
+    if (weightToCompare > this.weight) {
+      this.addFact(
+        `You are ${weightToCompare - this.weight} pounds heavier than a ${this.species}`
+      );
+    } else {
+      this.addFact(
+        `A ${this.species} was ${this.weight - weightToCompare} pounds heavier than you`
+      );
+    }
+  };
+
+  function Human(name, weight, height, age) {
+    this.species = name;
     this.weight = weight;
     this.height = height;
-    this.diet = diet;
-    this.when = moment(when, 'YYYY-MM-DD');
+    this.age = moment().diff(age, 'years', false);
     this.img = human;
     this.altText = 'Cartoon illustration of a human';
   }
 
   const userData = new Human(
+    humanName,
     humanWeight,
     totalHeight(humanHeightFt, humanHeightIn),
-    humanDiet,
     dob
   );
 
-  console.log(userData);
-
   const dinoArr = data.Dinos.map((obj) => {
-    let dino = new Dino(obj.species, obj.weight, obj.height, obj.diet, obj.when);
+    let dino = new Dino(obj.species, obj.weight, obj.height, obj.when);
 
     switch (obj.species) {
       case 'Ankylosaurs':
@@ -101,7 +133,7 @@ function App() {
         break;
     }
 
-    dino.facts.push(obj.fact);
+    dino.facts = obj.facts;
     dino.altText = `Cartoon illustration of a ${obj.species}`;
 
     return dino;
@@ -177,32 +209,17 @@ function App() {
                 value={dob || ''}
                 onChange={(e) => setDob(e.target.value)}
               />
-              <p>Diet:</p>
-              <label className='visually-hidden' htmlFor='diet'>
-                Diet:
-              </label>
-              <select
-                id='diet'
-                className='form-field__full'
-                name='diet'
-                value={humanDiet || ''}
-                onChange={(e) => setHumanDiet(e.target.value)}
-              >
-                <option>Herbavor</option>
-                <option>Omnivor</option>
-                <option>Carnivor</option>
-              </select>
               <input className='submit-button' type='submit' name='submit' value='Compare Me!' />
             </div>
           </form>
         )}
         {!showForm && (
           <div id='grid'>
-            {dinoArr.map((obj) => (
+            {displayArr.map((obj) => (
               <div className='grid-item'>
                 <h3>{obj.species}</h3>
                 <img src={`${obj.img}`} alt={obj.altText} />
-                <p>{obj.facts[0]}</p>
+                {obj.facts && <p>{obj.facts[obj.species === 'Pigeon' ? 0 : randomIndex(5)]}</p>}
               </div>
             ))}
           </div>

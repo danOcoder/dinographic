@@ -6,8 +6,12 @@
       "height": 114,
       "diet": "herbivore",
       "where": "North America",
-      "when": "Late Cretaceous",
-      "fact": "First discovered in 1889 by Othniel Charles Marsh"
+      "when": 66000000,
+      "facts": [
+        "First discovered in 1889 by Othniel Charles Marsh",
+        "The name 'Triceratops' comes from the Greek language, with 'tri' meaning three and 'keratops' meaning horned face.",
+        "The skull of a Triceratops alone could grow over 2m (7ft) in length."
+      ]
     },
     {
       "species": "Tyrannosaurus Rex",
@@ -15,8 +19,12 @@
       "height": 144,
       "diet": "carnivore",
       "where": "North America",
-      "when": "Late Cretaceous",
-      "fact": "The largest known skull measures in at 5 feet long."
+      "when": 66000000,
+      "facts": [
+        "The largest known skull measures in at 5 feet long.",
+        "The Tyrannosaurus had a life span of around 30 years.",
+        "Its arms were too short to reach its mouth."
+      ]
     },
     {
       "species": "Ankylosaurs",
@@ -24,8 +32,12 @@
       "height": 55,
       "diet": "herbivore",
       "where": "North America",
-      "when": "Late Cretaceous",
-      "fact": "Ankylosaurs survived for approximately 135 million years."
+      "when": 66000000,
+      "facts": [
+        "Ankylosaurs survived for approximately 135 million years.",
+        "The name Ankylosaurus means 'fused lizard'.",
+        "The signature feature of Ankylosaurus was its body armor."
+      ]
     },
     {
       "species": "Brachiosaurus",
@@ -33,8 +45,12 @@
       "height": 372,
       "diet": "herbivore",
       "where": "North America",
-      "when": "Late Jurassic",
-      "fact": "An asteroid was named 9954 Brachiosaurus in 1991."
+      "when": 145500000,
+      "facts": [
+        "An asteroid was named 9954 Brachiosaurus in 1991.",
+        "The Brachiosaurus had a long neck, a small head and a relatively short tail compared to other Sauropods.",
+        "The Brachiosaurus walked on all four legs."
+      ]
     },
     {
       "species": "Stegosaurus",
@@ -42,8 +58,12 @@
       "height": 79,
       "diet": "herbivore",
       "where": "North America, Europe, Asia",
-      "when": "Late Jurassic to Early Cretaceous",
-      "fact": "The Stegosaurus had between 17 and 22 separate places and flat spines."
+      "when": 66000000,
+      "facts": [
+        "The Stegosaurus had between 17 and 22 separate places and flat spines.",
+        "The name 'Stegosaurus' comes from the Greek words 'stegos' meaning roof and 'sauros' meaning lizard.",
+        "Although the Stegosaurus body was large, the size of their brain was only around the size of a dog’s."
+      ]
     },
     {
       "species": "Elasmosaurus",
@@ -51,8 +71,12 @@
       "height": 59,
       "diet": "carnivore",
       "where": "North America",
-      "when": "Late Cretaceous",
-      "fact": "Elasmosaurus was a marine reptile first discovered in Kansas."
+      "when": 66000000,
+      "facts": [
+        "Elasmosaurus was a marine reptile first discovered in Kansas.",
+        "The meaning of its name is 'Thin Plated Lizard'.",
+        "They were slow swimmers."
+      ]
     },
     {
       "species": "Pteranodon",
@@ -60,8 +84,12 @@
       "height": 20,
       "diet": "carnivore",
       "where": "North America",
-      "when": "Late Cretaceous",
-      "fact": "Actually a flying reptile, the Pteranodon is not a dinosaur."
+      "when": 66000000,
+      "facts": [
+        "Actually a flying reptile, the Pteranodon is not a dinosaur.",
+        "Pteranodons were about six feet long from head to toe and weighed about 35 pounds.",
+        "The wingspan of the pteranodon was thought to be 25 to 33 feet across."
+      ]
     },
     {
       "species": "Pigeon",
@@ -70,7 +98,7 @@
       "diet": "herbivore",
       "where": "World Wide",
       "when": "Holocene",
-      "fact": "All birds are living dinosaurs."
+      "facts": ["All birds are dinosaurs."]
     }
   ]
 }
