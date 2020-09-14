@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import moment from 'moment';
+
 import './App.css';
 
 import data from './dino.json';
@@ -15,12 +17,12 @@ import tyrannosaurus from './images/tyrannosaurus.png';
 
 function App() {
   const [showForm, setHideForm] = useState(true);
-  const [humanName, setHumanName] = useState('');
+  const [humanName, setHumanName] = useState(null);
   const [humanHeightFt, setHumanHeightFt] = useState(null);
   const [humanHeightIn, setHumanHeightIn] = useState(null);
   const [humanWeight, setHumanWeight] = useState(null);
   const [dob, setDob] = useState(null);
-  const [humanDiet, setHumanDiet] = useState('');
+  const [humanDiet, setHumanDiet] = useState(null);
 
   const totalHeight = (feet, inches) => {
     const height = parseInt(feet, 10) * 12 + parseInt(inches, 10);
@@ -48,19 +50,24 @@ function App() {
     this.facts = [];
   }
 
-  function Human() {
+  function Human(weight, height, diet, when) {
     this.species = 'Human';
-    this.weight = humanWeight;
-    this.height = totalHeight(humanHeightFt, humanHeightIn);
-    this.diet = humanDiet;
-    this.when = dob;
+    this.weight = weight;
+    this.height = height;
+    this.diet = diet;
+    this.when = moment(when, 'YYYY-MM-DD');
     this.img = human;
     this.altText = 'Cartoon illustration of a human';
   }
 
-  const inputData = new Human();
+  const userData = new Human(
+    humanWeight,
+    totalHeight(humanHeightFt, humanHeightIn),
+    humanDiet,
+    dob
+  );
 
-  console.log(inputData);
+  console.log(userData);
 
   const dinoArr = data.Dinos.map((obj) => {
     let dino = new Dino(obj.species, obj.weight, obj.height, obj.diet, obj.when);
