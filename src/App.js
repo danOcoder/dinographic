@@ -17,54 +17,84 @@ import tyrannosaurus from './images/tyrannosaurus.png';
 
 function App() {
   const [showForm, setHideForm] = useState(true);
-  const [humanName, setHumanName] = useState(null);
-  const [humanHeightFt, setHumanHeightFt] = useState(null);
-  const [humanHeightIn, setHumanHeightIn] = useState(null);
-  const [humanWeight, setHumanWeight] = useState(null);
+  const [userName, setUserName] = useState('');
+  const [userHeightFt, setUserHeightFt] = useState(0);
+  const [userHeightIn, setUserHeightIn] = useState(0);
+  const [userWeight, setUserWeight] = useState(0);
   const [dob, setDob] = useState(null);
   const [displayArr, setDisplayArr] = useState([]);
 
-  const totalHeight = (feet, inches) => {
-    const height = parseInt(feet, 10) * 12 + parseInt(inches, 10);
-    if (!height) {
-      return;
-    }
-    return height;
+  // User object
+  const user = {
+    name: userName,
+    heightFt: userHeightFt,
+    heightIn: userHeightIn,
+    totalHeight: function () {
+      return parseInt(this.heightFt, 10) * 12 + parseInt(this.heightIn, 10);
+    },
+    weight: userWeight,
+    age: moment().diff(dob, 'years', false),
+    img: human,
+    altText: 'Cartoon illustration of a human'
   };
 
+  // Generates random index value based on length of array passed to it
   const randomIndex = (length) => Math.floor(Math.random() * length) + 1;
 
+  // Preforms actions required on submission of the form
   const handleSubmit = (e) => {
     e.preventDefault();
+
     dinoArr.forEach((dino) => {
-      dino.compareAge(userData.age);
-      dino.compareHeight(userData.height);
-      dino.compareWeight(userData.weight);
+      dino.compareAge(user.age);
+      dino.compareHeight(user.totalHeight());
+      dino.compareWeight(user.weight);
     });
 
-    setDisplayArr(dinoArr);
+    user.species = user.name;
+
+    const dinoArr1 = dinoArr.slice(0, 4);
+    dinoArr1.push(user);
+    const dinoArr2 = dinoArr.slice(4, 8);
+    const dinoHumanArr = dinoArr1.concat(dinoArr2);
+
+    setDisplayArr(dinoHumanArr);
 
     setHideForm(false);
   };
 
-  function Dino(species, weight, height, when) {
+  // Resets form & UI
+  const handleFormReset = () => {
+    setUserName(null);
+    setUserHeightFt(null);
+    setUserHeightIn(null);
+    setUserWeight(null);
+    setDob(null);
+    setDisplayArr([]);
+
+    setHideForm(true);
+  };
+
+  // Dino constructor function
+  function Dino(species, weight, height, when, facts) {
     this.species = species;
     this.weight = weight;
     this.height = height;
     this.when = when;
-    this.img = '';
-    this.altText = '';
-    this.facts = [];
+    this.facts = facts;
   }
 
+  // Convenience function - pushes facts to facts array
   Dino.prototype.addFact = function (fact) {
     this.facts.push(fact);
   };
 
+  // Calculates difference between period dino existed & age of user
   Dino.prototype.compareAge = function (ageToCompare) {
     this.addFact(`Looks like you missed ${this.species} by ${this.when - ageToCompare} years`);
   };
 
+  // Calculates difference between height of human & height of dino
   Dino.prototype.compareHeight = function (heightToCompare) {
     if (heightToCompare > this.height) {
       this.addFact(`You are ${heightToCompare - this.height} inches taller than a ${this.species}`);
@@ -73,6 +103,7 @@ function App() {
     }
   };
 
+  // Calculates difference between weight of human & weight of dino
   Dino.prototype.compareWeight = function (weightToCompare) {
     if (weightToCompare > this.weight) {
       this.addFact(
@@ -85,24 +116,9 @@ function App() {
     }
   };
 
-  function Human(name, weight, height, age) {
-    this.species = name;
-    this.weight = weight;
-    this.height = height;
-    this.age = moment().diff(age, 'years', false);
-    this.img = human;
-    this.altText = 'Cartoon illustration of a human';
-  }
-
-  const userData = new Human(
-    humanName,
-    humanWeight,
-    totalHeight(humanHeightFt, humanHeightIn),
-    dob
-  );
-
+  // Create array of new Dino invocations based on values for dino json
   const dinoArr = data.Dinos.map((obj) => {
-    let dino = new Dino(obj.species, obj.weight, obj.height, obj.when);
+    let dino = new Dino(obj.species, obj.weight, obj.height, obj.when, obj.facts);
 
     switch (obj.species) {
       case 'Ankylosaurs':
@@ -133,7 +149,6 @@ function App() {
         break;
     }
 
-    dino.facts = obj.facts;
     dino.altText = `Cartoon illustration of a ${obj.species}`;
 
     return dino;
@@ -147,6 +162,7 @@ function App() {
         <h3>How do you compare?</h3>
       </header>
       <main className='main-content-container'>
+        {/* FIXME: Refactor transition between form & grid with react-router & react transition group */}
         {showForm && (
           <form onSubmit={handleSubmit} id='dino-compare'>
             <div className='form-container'>
@@ -155,34 +171,37 @@ function App() {
                 Name:
               </label>
               <input
+                required
                 id='name'
                 className='form-field__full'
                 type='name'
                 name='name'
-                value={humanName || ''}
-                onChange={(e) => setHumanName(e.target.value)}
+                value={userName || ''}
+                onChange={(e) => setUserName(e.target.value)}
               />
               <p>Height</p>
               <label htmlFor='feet'>
                 Feet:{' '}
                 <input
+                  required
                   id='feet'
                   className='form-field__short'
                   type='number'
                   name='feet'
-                  value={humanHeightFt || ''}
-                  onChange={(e) => setHumanHeightFt(e.target.value)}
+                  value={userHeightFt || ''}
+                  onChange={(e) => setUserHeightFt(e.target.value)}
                 />
               </label>
               <label htmlFor='inches'>
                 inches:{' '}
                 <input
+                  required
                   id='inches'
                   className='form-field__short'
                   name='inches'
                   type='number'
-                  value={humanHeightIn || ''}
-                  onChange={(e) => setHumanHeightIn(e.target.value)}
+                  value={userHeightIn || ''}
+                  onChange={(e) => setUserHeightIn(e.target.value)}
                 />
               </label>
               <p>Weight (lbs):</p>
@@ -190,18 +209,20 @@ function App() {
                 Weight (lbs):
               </label>
               <input
+                required
                 id='weight'
                 className='form-field__full'
                 type='number'
                 name='weight'
-                value={humanWeight || ''}
-                onChange={(e) => setHumanWeight(parseInt(e.target.value, 10))}
+                value={userWeight || ''}
+                onChange={(e) => setUserWeight(parseInt(e.target.value, 10))}
               />
               <p>DOB:</p>
               <label htmlFor='dob' className='visually-hidden'>
                 DOB:
               </label>
               <input
+                required
                 id='dob'
                 className='form-field__full'
                 type='date'
@@ -214,14 +235,19 @@ function App() {
           </form>
         )}
         {!showForm && (
-          <div id='grid'>
-            {displayArr.map((obj) => (
-              <div className='grid-item'>
-                <h3>{obj.species}</h3>
-                <img src={`${obj.img}`} alt={obj.altText} />
-                {obj.facts && <p>{obj.facts[obj.species === 'Pigeon' ? 0 : randomIndex(5)]}</p>}
-              </div>
-            ))}
+          <div className='grid-flex-parent'>
+            <div id='grid'>
+              {displayArr.map((obj) => (
+                <div key={obj.species} className='grid-item'>
+                  <h3>{obj.species}</h3>
+                  <img src={`${obj.img}`} alt={obj.altText} />
+                  {obj.facts && <p>{obj.facts[obj.species === 'Pigeon' ? 0 : randomIndex(5)]}</p>}
+                </div>
+              ))}
+            </div>
+            <button className='submit-button' onClick={handleFormReset}>
+              Compare another human
+            </button>
           </div>
         )}
       </main>
