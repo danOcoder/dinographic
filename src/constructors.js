@@ -1,8 +1,8 @@
-export function Creature(species, weight, height, when, image, altText, facts) {
+export function Creature(species, weight, height, age, image, altText, facts) {
   this.species = species;
   this.weight = weight;
   this.height = height;
-  this.when = when;
+  this.age = age;
   this.image = image;
   this.altText = altText;
   this.facts = facts;

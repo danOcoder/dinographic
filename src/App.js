@@ -8,14 +8,25 @@ import data from './dino.json';
 import anklyosaurus from './images/anklyosaurus.png';
 import brachiosaurus from './images/brachiosaurus.png';
 import elasmosaurus from './images/elasmosaurus.png';
-import human from './images/human.png';
 import pigeon from './images/pigeon.png';
 import pteranodon from './images/pteranodon.png';
 import stegosaurus from './images/stegosaurus.png';
 import triceratops from './images/triceratops.png';
 import tyrannosaurus from './images/tyrannosaurus.png';
+import human from './images/human.png';
 
 import './App.css';
+
+const dinoImages = [
+  anklyosaurus,
+  brachiosaurus,
+  elasmosaurus,
+  pigeon,
+  pteranodon,
+  stegosaurus,
+  triceratops,
+  tyrannosaurus
+];
 
 function App() {
   const [showForm, setHideForm] = useState(true);
@@ -24,25 +35,20 @@ function App() {
   const [userHeightIn, setUserHeightIn] = useState(0);
   const [userHeight, setUserHeight] = useState(0);
   const [userWeight, setUserWeight] = useState(0);
-  const [dob, setDob] = useState(null);
+  const [dateOfBirth, setDateOfBirth] = useState(null);
+  const [userAge, setUserAge] = useState(0);
   const [displayArr, setDisplayArr] = useState([]);
 
   // User object
-  const user = {
-    name: userName,
-    heightFt: userHeightFt,
-    heightIn: userHeightIn,
-    totalHeight: function () {
-      return parseInt(this.heightFt, 10) * 12 + parseInt(this.heightIn, 10);
-    },
-    weight: userWeight,
-    age: moment().diff(dob, 'years', false),
-    img: human,
-    altText: 'Cartoon illustration of a human'
-  };
-
-  // species, weight, height, when, image, altText, facts;
-  // const newUser = Creature(userName, userHeight);
+  const user = new Creature(
+    userName,
+    userWeight,
+    userHeight,
+    userAge,
+    human,
+    'Cartoon illustration of a human',
+    []
+  );
 
   const handleUserHeight = (event) => {
     switch (event.target.name) {
@@ -58,12 +64,12 @@ function App() {
     setUserHeight(userHeightFt * 12 + userHeightIn);
   };
 
-  // const handleUserAge = (event) => {
-  //   setDob()
-  //   setDob(moment().diff(event.target.value, 'years', false));
-  // };
-
-  // console.log(dob);
+  const handleUserAge = (event) => {
+    const dob = event.target.value;
+    const age = moment().diff(dob, 'years', false);
+    setDateOfBirth(dob);
+    setUserAge(age);
+  };
 
   // Generates random index value based on length of array passed to it
   const randomIndex = (length) => Math.floor(Math.random() * length) + 1;
@@ -74,14 +80,11 @@ function App() {
 
     dinoArr.forEach((dino) => {
       dino.compareAge(user.age);
-      dino.compareHeight(user.totalHeight());
+      dino.compareHeight(user.height);
       dino.compareWeight(user.weight);
     });
 
-    user.species = user.name;
-
     setDisplayArr([...dinoArr.slice(0, 4), { ...user }, ...dinoArr.slice(4, 8)]);
-
     setHideForm(false);
   };
 
@@ -91,56 +94,56 @@ function App() {
     setUserHeightFt(null);
     setUserHeightIn(null);
     setUserWeight(null);
-    setDob(null);
+    setDateOfBirth(null);
     setDisplayArr([]);
 
     setHideForm(true);
   };
 
-  // Dino constructor function
-  function Dino(species, weight, height, when, facts) {
-    this.species = species;
-    this.weight = weight;
-    this.height = height;
-    this.when = when;
-    this.facts = facts;
-  }
+  // // Dino constructor function
+  // function Dino(species, weight, height, when, facts) {
+  //   this.species = species;
+  //   this.weight = weight;
+  //   this.height = height;
+  //   this.when = when;
+  //   this.facts = facts;
+  // }
 
-  // Convenience function - pushes facts to facts array
-  Dino.prototype.addFact = function (fact) {
-    this.facts.push(fact);
-  };
+  // // Convenience function - pushes facts to facts array
+  // Dino.prototype.addFact = function (fact) {
+  //   this.facts.push(fact);
+  // };
 
-  // Calculates difference between period dino existed & age of user
-  Dino.prototype.compareAge = function (ageToCompare) {
-    this.addFact(`Looks like you missed ${this.species} by ${this.when - ageToCompare} years`);
-  };
+  // // Calculates difference between period dino existed & age of user
+  // Dino.prototype.compareAge = function (ageToCompare) {
+  //   this.addFact(`Looks like you missed ${this.species} by ${this.when - ageToCompare} years`);
+  // };
 
-  // Calculates difference between height of human & height of dino
-  Dino.prototype.compareHeight = function (heightToCompare) {
-    if (heightToCompare > this.height) {
-      this.addFact(`You are ${heightToCompare - this.height} inches taller than a ${this.species}`);
-    } else {
-      this.addFact(`A ${this.species} was ${this.height - heightToCompare} inches taller than you`);
-    }
-  };
+  // // Calculates difference between height of human & height of dino
+  // Dino.prototype.compareHeight = function (heightToCompare) {
+  //   if (heightToCompare > this.height) {
+  //     this.addFact(`You are ${heightToCompare - this.height} inches taller than a ${this.species}`);
+  //   } else {
+  //     this.addFact(`A ${this.species} was ${this.height - heightToCompare} inches taller than you`);
+  //   }
+  // };
 
-  // Calculates difference between weight of human & weight of dino
-  Dino.prototype.compareWeight = function (weightToCompare) {
-    if (weightToCompare > this.weight) {
-      this.addFact(
-        `You are ${weightToCompare - this.weight} pounds heavier than a ${this.species}`
-      );
-    } else {
-      this.addFact(
-        `A ${this.species} was ${this.weight - weightToCompare} pounds heavier than you`
-      );
-    }
-  };
+  // // Calculates difference between weight of human & weight of dino
+  // Dino.prototype.compareWeight = function (weightToCompare) {
+  //   if (weightToCompare > this.weight) {
+  //     this.addFact(
+  //       `You are ${weightToCompare - this.weight} pounds heavier than a ${this.species}`
+  //     );
+  //   } else {
+  //     this.addFact(
+  //       `A ${this.species} was ${this.weight - weightToCompare} pounds heavier than you`
+  //     );
+  //   }
+  // };
 
   // Create array of new Dino invocations based on values for dino json
   const dinoArr = data.Dinos.map((obj) => {
-    let dino = new Dino(obj.species, obj.weight, obj.height, obj.when, obj.facts);
+    let dino = new Creature(obj.species, obj.weight, obj.height, obj.when, obj.facts);
 
     switch (obj.species) {
       case 'Ankylosaurs':
@@ -249,7 +252,7 @@ function App() {
                 className='form-field__full'
                 type='date'
                 name='dob'
-                value={dob || ''}
+                value={dateOfBirth || ''}
                 // onChange={(e) => setDob(e.target.value)}
                 onChange={handleUserAge}
               />
