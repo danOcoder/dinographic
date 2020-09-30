@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import moment from 'moment';
 
-import './App.css';
+import { Creature } from './constructors';
 
 import data from './dino.json';
 
@@ -15,11 +15,14 @@ import stegosaurus from './images/stegosaurus.png';
 import triceratops from './images/triceratops.png';
 import tyrannosaurus from './images/tyrannosaurus.png';
 
+import './App.css';
+
 function App() {
   const [showForm, setHideForm] = useState(true);
   const [userName, setUserName] = useState('');
   const [userHeightFt, setUserHeightFt] = useState(0);
   const [userHeightIn, setUserHeightIn] = useState(0);
+  const [userHeight, setUserHeight] = useState(0);
   const [userWeight, setUserWeight] = useState(0);
   const [dob, setDob] = useState(null);
   const [displayArr, setDisplayArr] = useState([]);
@@ -38,6 +41,29 @@ function App() {
     altText: 'Cartoon illustration of a human'
   };
 
+  // species, weight, height, when, image, altText, facts;
+  // const newUser = Creature(userName, userHeight);
+
+  const handleUserHeight = (event) => {
+    switch (event.target.name) {
+      case 'feet':
+        setUserHeightFt(parseInt(event.target.value, 10));
+        break;
+      case 'inches':
+        setUserHeightIn(parseInt(event.target.value, 10));
+        break;
+      default:
+        break;
+    }
+    setUserHeight(userHeightFt * 12 + userHeightIn);
+  };
+
+  const handleUserAge = (event) => {
+    setDob(moment().diff(event.target.value, 'years', false));
+  };
+
+  console.log(dob);
+
   // Generates random index value based on length of array passed to it
   const randomIndex = (length) => Math.floor(Math.random() * length) + 1;
 
@@ -53,12 +79,7 @@ function App() {
 
     user.species = user.name;
 
-    const dinoArr1 = dinoArr.slice(0, 4);
-    dinoArr1.push(user);
-    const dinoArr2 = dinoArr.slice(4, 8);
-    const dinoHumanArr = dinoArr1.concat(dinoArr2);
-
-    setDisplayArr(dinoHumanArr);
+    setDisplayArr([...dinoArr.slice(0, 4), { ...user }, ...dinoArr.slice(4, 8)]);
 
     setHideForm(false);
   };
@@ -189,7 +210,7 @@ function App() {
                   type='number'
                   name='feet'
                   value={userHeightFt || ''}
-                  onChange={(e) => setUserHeightFt(e.target.value)}
+                  onChange={handleUserHeight}
                 />
               </label>
               <label htmlFor='inches'>
@@ -201,7 +222,7 @@ function App() {
                   name='inches'
                   type='number'
                   value={userHeightIn || ''}
-                  onChange={(e) => setUserHeightIn(e.target.value)}
+                  onChange={handleUserHeight}
                 />
               </label>
               <p>Weight (lbs):</p>
@@ -228,7 +249,8 @@ function App() {
                 type='date'
                 name='dob'
                 value={dob || ''}
-                onChange={(e) => setDob(e.target.value)}
+                // onChange={(e) => setDob(e.target.value)}
+                onChange={handleUserAge}
               />
               <input className='submit-button' type='submit' name='submit' value='Compare Me!' />
             </div>
