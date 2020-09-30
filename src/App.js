@@ -58,11 +58,12 @@ function App() {
     setUserHeight(userHeightFt * 12 + userHeightIn);
   };
 
-  const handleUserAge = (event) => {
-    setDob(moment().diff(event.target.value, 'years', false));
-  };
+  // const handleUserAge = (event) => {
+  //   setDob()
+  //   setDob(moment().diff(event.target.value, 'years', false));
+  // };
 
-  console.log(dob);
+  // console.log(dob);
 
   // Generates random index value based on length of array passed to it
   const randomIndex = (length) => Math.floor(Math.random() * length) + 1;
